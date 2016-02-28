@@ -23,16 +23,26 @@ if ($_SESSION["user_email"] == "") {
 		<link rel="icon" href="favicon.ico">
 		<!-- Latest compiled and minified CSS -->
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-		<!-- Theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+		<!-- Custom styles -->
+		<link href="views/dashboard.css" rel="stylesheet">
 	</head>
 
-	<body role="document">
+	<!-- time widget needs to be initiated, see time_w.php -->
+	<body onload="startTime()">
 
 		<?php
 			$email = $_SESSION["user_email"];
-			echo "Welcome user " . $email;
+
 		?>
+
+		<div class="container-fluid">
+			<?php
+				// TODO format the widgets on the page
+				require_once("widgets/time_w.php");
+				// require_once("widgets/search_w.php");
+			?>
+
+		</div>
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="../jquery.min.js"><\/script>')</script>

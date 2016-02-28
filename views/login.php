@@ -33,8 +33,9 @@ require_once("php/reset_password.php");
 				<input type="email" name="inputEmail" id="inputEmail" class="form-control" placeholder="Email address" required autofocus>
 				<label for="inputPassword" class="sr-only">Password</label>
 				<input type="password" name="inputPassword" id="inputPassword" class="form-control" placeholder="Password" required>
-				<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Login</button>
 			</form>
+			
 		</div> <!-- /container -->
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
