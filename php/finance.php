@@ -12,7 +12,7 @@ function getCurrentPrice($ticker){
     
     // fetch data from Yahoo API
     // parameter l1 = Last Trade(Price Only)
-    $currentPrice = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=$ticker&f=l1&e=.csv");
+    $currentPrice = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=".$ticker."&f=l1&e=.csv");
 
     return $currentPrice;
     
@@ -23,7 +23,7 @@ function getCompanyName($ticker){
     
     // fetch data from Yahoo API
     // parameter n = Name
-    $name = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=$ticker&f=n&e=.csv");
+    $name = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=".$ticker."&f=n&e=.csv");
     
     // removing the quotation marks
     $name = str_replace('"', "", $name);
@@ -35,7 +35,7 @@ function getClosingPrice($ticker){
     
     // fetch data from Yahoo API
     // parameter p = Prev Close(The closing price for the trading day prior to the last trade reported)
-    $prevClose = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=$ticker&f=p&e=.csv");
+    $prevClose = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=".$ticker."&f=p&e=.csv");
     return $prevClose;
 }
     
@@ -44,7 +44,7 @@ function getOpeningPrice($ticker){
     
     // fetch data from Yahoo API
     // parameter o = Open
-    $open = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=$ticker&f=o&e=.csv");
+    $open = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=".$ticker."&f=o&e=.csv");
     return $open;
 }
     
@@ -53,7 +53,7 @@ function getPercentChanged($ticker){
     
     // fetch data from Yahoo API
     // parameter p2 = Change in Percent
-    $change = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=$ticker&f=p2&e=.csv");
+    $change = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=".$ticker."&f=p2&e=.csv");
     $change = str_replace('"', "", $change);
 
     return $change;

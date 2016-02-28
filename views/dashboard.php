@@ -5,7 +5,8 @@ if ($_SESSION["user_email"] == "") {
 	header("Location: ..");
 }
 
-// require_once("php/finance.php");
+require_once("php/finance.php");
+$email = $_SESSION["user_email"];
 
 ?>
 
@@ -29,11 +30,6 @@ if ($_SESSION["user_email"] == "") {
 
 	<!-- time widget needs to be initiated, see time_w.php -->
 	<body onload="startTime()">
-
-		<?php
-			$email = $_SESSION["user_email"];
-
-		?>
 
 		<div class="container-fluid">
 			<?php
