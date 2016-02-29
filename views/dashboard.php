@@ -36,6 +36,8 @@ $email = $_SESSION["user_email"];
 				// TODO format the widgets on the page
 				require_once("widgets/time_w.php");
 				// require_once("widgets/search_w.php");
+				require_once("widgets/portfolio_w.php");
+				require_once("widgets/watchlist_w.php");
 			?>
 
 		</div>

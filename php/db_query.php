@@ -32,11 +32,44 @@ function credentialsValid($email, $encryptedPassword) {
 }
 
 function getPortfolio($email) {
-	// return portfolio of the user
+	return getPortfolioOrWatchlist($email, true);
 }
 
 function getWatchlist($email) {
-	// return watchlist of the user
+	return getPortfolioOrWatchlist($email, false);
+}
+
+function getPortfolioOrWatchlist($email, $isPortfolio) {
+	// return a map of the tickers and corresponding number of shares that the user has in their portfolio
+
+	// make the query for getting that user's tickers and amounts
+
+	// for their portfolio, "amount > 0" since they own that stock
+	$query = "SELECT ticker, amount FROM portfolios WHERE email = '" . $email . "'AND amount > 0 ORDER BY ticker";
+
+	// for their watchlist, "amount = 0" since they don't own that stock
+	if (!$isPortfolio) {
+		$query = "SELECT ticker, amount FROM portfolios WHERE email = '" . $email . "'AND amount = 0 ORDER BY ticker";
+	}
+	$result = getQueryResult($query);
+
+	// initialize a portfolio map, with ticker => amount
+	// this is what we'll return
+	$portfolio = array();
+
+	// iterate through the query results and populate the map
+	if ($result) {
+		while ($row = mysql_fetch_array($result)) {
+			$ticker = strtoupper($row["ticker"]);
+			$amount = $row["amount"];
+			$portfolio[$ticker] = $amount;
+		}
+	} else {
+		// echo mysql_error();
+	}
+
+	// return the portfolio structure -- the front end calling this method should read structure and print it as desired
+	return $portfolio;
 }
 
 ?>
