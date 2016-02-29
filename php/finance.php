@@ -39,6 +39,7 @@
                 }
                 // store it private data member
                 $this->data = $data;
+                var_dump($this->data);
             }
         }
         
@@ -65,7 +66,9 @@
     
     }
     
-
+$f = new financeAPI();
+$f->getData(array('AAPL'));
+$f->getCompanyName('AAPL');
     
 
 
