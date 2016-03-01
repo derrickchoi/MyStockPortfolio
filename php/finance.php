@@ -66,9 +66,9 @@
     
     }
     
-    // $f = new financeAPI();
-    // $f->getData(array('AAPL'));
-    // $f->getCompanyName('AAPL');
+     $f = new financeAPI();
+     $f->getData(array('AAPL'));
+     $f->getCompanyName('AAPL');
     
 
 
