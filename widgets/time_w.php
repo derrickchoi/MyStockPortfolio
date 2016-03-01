@@ -1,7 +1,24 @@
 <script>
 
 	function startTime() {
-		// get current time
+
+		// code for automatic time out after 5 minutes of inactivity:
+		var t;
+
+		window.onload = resetTimer;
+		document.onmousemove = resetTimer;
+		document.onkeypress = resetTimer;
+
+		function logout() {
+			location.href = 'php/logout.php';
+		}
+
+		function resetTimer() {
+			clearTimeout(t);
+			t = setTimeout(logout, 300000);
+		}
+
+		// display current time in EST:
 		var today = new Date();
 
 		// adjust current time to EST
@@ -17,3 +34,7 @@
 </script>
 <div id="time"></div>
 <a href="php/logout.php">Logout</a>
+<br />
+<?php 
+	// echo getBalance($email);
+?>
