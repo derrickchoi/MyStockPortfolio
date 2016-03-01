@@ -35,6 +35,7 @@ rect {
 <body>
   <div class="graph-widget"></div>
   <div>
+<!--TODO evenly spaced and square-->
     <button class="button-1">1 day</button>
     <button class="button-2">5 days</button>
     <button class="button-3">1 month</button>
@@ -53,7 +54,7 @@ var colors = [
 	'orange'
 ]
 
-var parseTime = d3.time.format("%d-%b-%y").parse;
+var parseTime = d3.time.format("%Y/%m/%d").parse;
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
@@ -79,7 +80,7 @@ var line = d3.svg.line()
 var zoom = d3.behavior.zoom()
     .on("zoom", zoomed);
 	
-var allData;
+var allData = [];
 
 //************************************************************
 // Generate our SVG object
@@ -92,52 +93,37 @@ var svg = d3.select(".graph-widget").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .call(zoom);
 
-d3.tsv("data.tsv", type, function(error, data) {
-  if (error) throw error;
-
-  allData = data;
-  
-  x.domain(d3.extent(data, function(d) { return d.date; }));
-  y.domain(d3.extent(data, function(d) { return d.close; }));
-	svg.call(zoom.x(x).y(y));
-
-  svg.append("g")
-      .attr("class", "axis axis--x")
-      .attr("transform", "translate(0," + height + ")")
-      .call(xAxis)
-	.append("text")
-			.attr("class", "axis-title")
-			.attr("y", -10)
-			.attr("x", width)
-			.attr("dy", ".71em")
-			.style("text-anchor", "end")
-			.text("Time");
-      
-  svg.append("g")
-      .attr("class", "axis axis--y")
-      .call(yAxis)
-  .append("text")
-      .attr("class", "axis-title")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 6)
-      .attr("dy", ".71em")
-      .style("text-anchor", "end")
-      .text("Price ($)");
-      
-	svg.append("clipPath")
-			.attr("id", "clip")
-			.append("rect")
-			.attr("width", width)
-			.attr("height", height);
-			
-  svg.append("path")
-      .datum(data)
-      .attr("class", "line")
-			.attr("clip-path", "url(#clip)")
-			.attr("stroke", "red")
-      .attr("d", line);
-});
-
+svg.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+.append("text")
+    .attr("class", "axis-title")
+    .attr("y", -10)
+    .attr("x", width)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Time");
+    
+svg.append("g")
+    .attr("class", "axis axis--y")
+    .call(yAxis)
+.append("text")
+    .attr("class", "axis-title")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text("Price ($)");
+    
+svg.append("clipPath")
+    .attr("id", "clip")
+    .append("rect")
+    .attr("width", width)
+    .attr("height", height);
+    
+display(["y_goog.csv", "y_aapl.csv", "y_msft.csv"]);
+    
 d3.select(".button-1").on("click", oneDay);
 d3.select(".button-2").on("click", fiveDays);
 d3.select(".button-3").on("click", oneMonth);
@@ -157,6 +143,7 @@ function type(d) {
   return d;
 }
 
+//TODO max y in selected period not all time
 function oneDay() {
   var curr = new Date();
   var past = new Date();
@@ -211,12 +198,53 @@ function sixMonths() {
 
 function allTime() {
   var curr = new Date();
-  x.domain([d3.min(allData, function(d) { return d.date; }), curr]);
-  y.domain(d3.extent(allData, function(d) { return d.close; }));
+  var minTime = d3.min(allData[0], function(d) { return d.date; });
+  var maxPrice = d3.max(allData[0], function(d) { return d.close; });
+  allData.forEach(function (value, index, array) {
+    var min = d3.min(allData[index], function(d) { return d.date; });
+    if (min < minTime) minTime = min;
+    var max = d3.max(allData[index], function(d) { return d.close; });
+    if (max > maxPrice) maxPrice = max;
+  });
+  x.domain([minTime, curr]);
+  y.domain([0, maxPrice]);
 	svg.call(zoom.x(x).y(y));
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);  
 }
 
+function display(arr) {
+  arr.forEach(function cb(value, index, array) {
+    if (value.startsWith("y_")) {
+      d3.csv(value, type, function(error, data) {
+        if (error) throw error;
+
+        allData.push(data);
+        
+        var curr = new Date();
+        var past = new Date();
+        past.setMonth(past.getMonth()-6);
+        x.domain([past, curr]);
+        var maxPrice = d3.max(allData[0], function(d) { return d.close; });
+        allData.forEach(function (value, index, array) {
+          var max = d3.max(allData[index], function(d) { return d.close; });
+          if (max > maxPrice) maxPrice = max;
+        });
+        y.domain([0, maxPrice]);
+        svg.call(zoom.x(x).y(y));
+        svg.select(".axis--x").call(xAxis);
+        svg.select(".axis--y").call(yAxis);
+        svg.selectAll("path.line").attr("d", line);
+
+        svg.append("path")
+            .datum(data)
+            .attr("class", "line")
+            .attr("clip-path", "url(#clip)")
+            .attr("stroke", colors[index%4])
+            .attr("d", line);
+      });
+    }
+  });
+}
 </script>
