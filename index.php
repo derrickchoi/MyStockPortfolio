@@ -11,13 +11,13 @@ require_once("php/db_query.php");
 $email = $_POST["inputEmail"];
 $password = $_POST["inputPassword"];
 
-if ($_POST["inputEmail"] != "") {
+if ($email != "") {
 
 	// encrypt the given password to compare against encrypted password in DB
 	$encryptedPassword = encrypt($password);
 
 	if (credentialsValid($email, $encryptedPassword)) {
-		$_SESSION["user_email"] = $email;
+		$_SESSION["user_email"] = strtolower($email);
 	}
 
 }

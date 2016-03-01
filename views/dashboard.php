@@ -33,11 +33,13 @@ $email = $_SESSION["user_email"];
 
 		<div class="container-fluid">
 			<?php
-				// TODO format the widgets on the page
+				// TODO format the widgets on the page 
 				require_once("widgets/time_w.php");
 				// require_once("widgets/search_w.php");
 				require_once("widgets/portfolio_w.php");
 				require_once("widgets/watchlist_w.php");
+				require_once("widgets/search_w.php");
+				require_once("widgets/trade_w.php");
 			?>
 
 		</div>
