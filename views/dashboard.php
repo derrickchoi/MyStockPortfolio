@@ -39,6 +39,7 @@ $email = $_SESSION["user_email"];
 				require_once("widgets/portfolio_w.php");
 				require_once("widgets/watchlist_w.php");
 				require_once("widgets/search_w.php");
+				require_once("widgets/trade_w.php");
 			?>
 
 		</div>
