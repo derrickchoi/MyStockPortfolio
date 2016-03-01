@@ -2,7 +2,6 @@
 <meta charset="utf-8">
 <title>Graph Widget</title>
 <style>
-  
 body {
   font: 10px sans-serif;
   margin: 50px;
@@ -19,7 +18,7 @@ rect {
 }
  
 .axis text {
-	fill: #555;
+	fill: #222222;
 }
  
 .axis .axis-label {
@@ -33,7 +32,10 @@ rect {
 
 </style>
 <body>
+  <!--This div will contain the actual graph-->
   <div class="graph-widget"></div>
+  
+  <!--Buttons-->
   <div>
 <!--TODO evenly spaced and square-->
     <button class="button-1">1 day</button>
@@ -47,44 +49,48 @@ rect {
 <script src="d3.v3.min.js"></script>
 <script>
 
-var colors = [
+var lineColors = [
 	'red',
 	'yellow',
 	'blue',
 	'orange'
 ]
 
+// Date format of input files
 var parseTime = d3.time.format("%Y/%m/%d").parse;
+
+// Spacing around the graph
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-	
+
+// Scales for the graph
 var x = d3.time.scale()
-    .range([0, width]);
- 
+    .range([0, width]); 
 var y = d3.scale.linear()
     .range([height, 0]);
 	
+// Graph axes
 var xAxis = d3.svg.axis()
     .scale(x)
     .orient("bottom");	
-	
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
-	
+    
+// Necessary to draw all lines
 var line = d3.svg.line()
 	.x(function(d) { return x(d.date); })
   .y(function(d) { return y(d.close); });
 
+// Add zoom functionality
 var zoom = d3.behavior.zoom()
     .on("zoom", zoomed);
 	
+// Stores data of all lines currently plotted
 var allData = [];
 
-//************************************************************
-// Generate our SVG object
-//************************************************************	
+// Main graph component
 var svg = d3.select(".graph-widget").append("svg")
 	.call(zoom)
     .attr("width", width + margin.left + margin.right)
@@ -93,6 +99,7 @@ var svg = d3.select(".graph-widget").append("svg")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .call(zoom);
 
+// Add x axis and axis label
 svg.append("g")
     .attr("class", "axis axis--x")
     .attr("transform", "translate(0," + height + ")")
@@ -104,7 +111,8 @@ svg.append("g")
     .attr("dy", ".71em")
     .style("text-anchor", "end")
     .text("Time");
-    
+
+// Add y axis and axis label
 svg.append("g")
     .attr("class", "axis axis--y")
     .call(yAxis)
@@ -115,15 +123,28 @@ svg.append("g")
     .attr("dy", ".71em")
     .style("text-anchor", "end")
     .text("Price ($)");
-    
+
+// Add anchor for lines
 svg.append("clipPath")
     .attr("id", "clip")
     .append("rect")
     .attr("width", width)
     .attr("height", height);
-    
+
+var curr = new Date();
+var past = new Date();
+past.setMonth(past.getMonth()-6);
+x.domain([past, curr]);
+y.domain([0, 500]);
+svg.call(zoom.x(x).y(y));
+svg.select(".axis--x").call(xAxis);
+svg.select(".axis--y").call(yAxis);
+svg.selectAll("path.line").attr("d", line);
+
+// Display these csvs
 display(["y_goog.csv", "y_aapl.csv", "y_msft.csv"]);
-    
+
+// Connect buttons to functions
 d3.select(".button-1").on("click", oneDay);
 d3.select(".button-2").on("click", fiveDays);
 d3.select(".button-3").on("click", oneMonth);
@@ -131,12 +152,14 @@ d3.select(".button-4").on("click", threeMonths);
 d3.select(".button-5").on("click", sixMonths);
 d3.select(".button-6").on("click", allTime);
 
+// Called when user zooms or pans
 function zoomed() {
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);
 }
 
+// Used to parse CSVs
 function type(d) {
   d.date = parseTime(d.date);
   d.close = +d.close;
@@ -144,17 +167,24 @@ function type(d) {
 }
 
 //TODO max y in selected period not all time
+// Set x axis domain to one day
 function oneDay() {
+  // Get dates
   var curr = new Date();
   var past = new Date();
   past.setDate(past.getDate()-1);
+  
+  // Set domain
   x.domain([past, curr]);
+  
+  // Update graph
 	svg.call(zoom.x(x).y(y));
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);
 }
 
+// Set x axis domain to five days
 function fiveDays() {
   var curr = new Date();
   var past = new Date();
@@ -165,6 +195,7 @@ function fiveDays() {
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);}
 
+// Set x axis domain to one month
 function oneMonth() {
   var curr = new Date();
   var past = new Date();
@@ -175,6 +206,7 @@ function oneMonth() {
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);}
 
+// Set x axis domain to three months
 function threeMonths() {
   var curr = new Date();
   var past = new Date();
@@ -185,6 +217,7 @@ function threeMonths() {
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);}
 
+// Set x axis domain to six months
 function sixMonths() {
   var curr = new Date();
   var past = new Date();
@@ -196,6 +229,7 @@ function sixMonths() {
 	svg.selectAll("path.line").attr("d", line);
 }
 
+// Set x axis domain to all time
 function allTime() {
   var curr = new Date();
   var minTime = d3.min(allData[0], function(d) { return d.date; });
@@ -214,18 +248,20 @@ function allTime() {
 	svg.selectAll("path.line").attr("d", line);  
 }
 
+// Display line graphs
 function display(arr) {
+  // Iterate through array of CSV names
   arr.forEach(function cb(value, index, array) {
+    // Only display if filename starts with "y_"
     if (value.startsWith("y_")) {
+      // Parse CSV
       d3.csv(value, type, function(error, data) {
         if (error) throw error;
-
+        
+        // Add to our data array
         allData.push(data);
         
-        var curr = new Date();
-        var past = new Date();
-        past.setMonth(past.getMonth()-6);
-        x.domain([past, curr]);
+        // Set domain to cover max price
         var maxPrice = d3.max(allData[0], function(d) { return d.close; });
         allData.forEach(function (value, index, array) {
           var max = d3.max(allData[index], function(d) { return d.close; });
@@ -237,11 +273,12 @@ function display(arr) {
         svg.select(".axis--y").call(yAxis);
         svg.selectAll("path.line").attr("d", line);
 
+        // Draw line
         svg.append("path")
             .datum(data)
             .attr("class", "line")
             .attr("clip-path", "url(#clip)")
-            .attr("stroke", colors[index%4])
+            .attr("stroke", lineColors[(allData.length-1)%4])
             .attr("d", line);
       });
     }
