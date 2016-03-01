@@ -32,7 +32,17 @@ rect {
 }
 
 </style>
-<body></body>
+<body>
+  <div class="graph-widget"></div>
+  <div>
+    <button class="button-1">1 day</button>
+    <button class="button-2">5 days</button>
+    <button class="button-3">1 month</button>
+    <button class="button-4">3 months</button>
+    <button class="button-5">6 months</button>
+    <button class="button-6">All Time</button>
+  </div>
+</body>
 <script src="d3.v3.min.js"></script>
 <script>
 
@@ -67,14 +77,14 @@ var line = d3.svg.line()
   .y(function(d) { return y(d.close); });
 
 var zoom = d3.behavior.zoom()
-    // .x(x)
-    // .y(y)
     .on("zoom", zoomed);
 	
+var allData;
+
 //************************************************************
 // Generate our SVG object
 //************************************************************	
-var svg = d3.select("body").append("svg")
+var svg = d3.select(".graph-widget").append("svg")
 	.call(zoom)
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -85,6 +95,8 @@ var svg = d3.select("body").append("svg")
 d3.tsv("data.tsv", type, function(error, data) {
   if (error) throw error;
 
+  allData = data;
+  
   x.domain(d3.extent(data, function(d) { return d.date; }));
   y.domain(d3.extent(data, function(d) { return d.close; }));
 	svg.call(zoom.x(x).y(y));
@@ -126,6 +138,13 @@ d3.tsv("data.tsv", type, function(error, data) {
       .attr("d", line);
 });
 
+d3.select(".button-1").on("click", oneDay);
+d3.select(".button-2").on("click", fiveDays);
+d3.select(".button-3").on("click", oneMonth);
+d3.select(".button-4").on("click", threeMonths);
+d3.select(".button-5").on("click", sixMonths);
+d3.select(".button-6").on("click", allTime);
+
 function zoomed() {
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
@@ -136,6 +155,68 @@ function type(d) {
   d.date = parseTime(d.date);
   d.close = +d.close;
   return d;
+}
+
+function oneDay() {
+  var curr = new Date();
+  var past = new Date();
+  past.setDate(past.getDate()-1);
+  x.domain([past, curr]);
+	svg.call(zoom.x(x).y(y));
+  svg.select(".axis--x").call(xAxis);
+  svg.select(".axis--y").call(yAxis);
+	svg.selectAll("path.line").attr("d", line);
+}
+
+function fiveDays() {
+  var curr = new Date();
+  var past = new Date();
+  past.setDate(past.getDate()-5);  
+  x.domain([past, curr]);
+	svg.call(zoom.x(x).y(y));
+  svg.select(".axis--x").call(xAxis);
+  svg.select(".axis--y").call(yAxis);
+	svg.selectAll("path.line").attr("d", line);}
+
+function oneMonth() {
+  var curr = new Date();
+  var past = new Date();
+  past.setMonth(past.getMonth()-1);
+  x.domain([past, curr]);
+	svg.call(zoom.x(x).y(y));
+  svg.select(".axis--x").call(xAxis);
+  svg.select(".axis--y").call(yAxis);
+	svg.selectAll("path.line").attr("d", line);}
+
+function threeMonths() {
+  var curr = new Date();
+  var past = new Date();
+  past.setMonth(past.getMonth()-3);  
+  x.domain([past, curr]);
+	svg.call(zoom.x(x).y(y));
+  svg.select(".axis--x").call(xAxis);
+  svg.select(".axis--y").call(yAxis);
+	svg.selectAll("path.line").attr("d", line);}
+
+function sixMonths() {
+  var curr = new Date();
+  var past = new Date();
+  past.setMonth(past.getMonth()-6);
+  x.domain([past, curr]);
+	svg.call(zoom.x(x).y(y));
+  svg.select(".axis--x").call(xAxis);
+  svg.select(".axis--y").call(yAxis);
+	svg.selectAll("path.line").attr("d", line);
+}
+
+function allTime() {
+  var curr = new Date();
+  x.domain([d3.min(allData, function(d) { return d.date; }), curr]);
+  y.domain(d3.extent(allData, function(d) { return d.close; }));
+	svg.call(zoom.x(x).y(y));
+  svg.select(".axis--x").call(xAxis);
+  svg.select(".axis--y").call(yAxis);
+	svg.selectAll("path.line").attr("d", line);  
 }
 
 </script>
