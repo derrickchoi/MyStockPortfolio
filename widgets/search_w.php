@@ -10,13 +10,30 @@
 			<script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 			<script src="search_auto.js"></script>
 		</div>
-		<ul class="list-group">
-  		<li class="list-group-item">CSCI 310 is so fun!</li>
-  		<li class="list-group-item">I can't get enough of it!</li>
-  		<li class="list-group-item">Can I take this class again?</li>
-		</ul>
+
+		<table class="table table-striped">
+ 			<tr>
+ 				<td>Facebook Inc.</td>
+ 				<td>display from</td>
+ 				<td contentEditable>9/29</td>
+ 				<td>to</td>
+ 				<td contentEditable>2/29</td>
+ 				<td <button class="btn btn-default">Graph</button>
+ 				<td <button class="btn btn-default">Add to Wishlist</button>
+ 			</tr>
+
+ 			<tr>
+ 				<td>Fac & Co.</td>
+ 				<td>display from</td>
+ 				<td contentEditable>9/29</td>
+ 				<td>to</td>
+ 				<td contentEditable>2/29</td>
+ 				<td <button class="btn btn-default">Graph</button>
+ 				<td <button class="btn btn-default">Add to Wishlist</button>
+ 			</tr>
+		</table>
 
 	</div>
-	<button type="Add to Watchlist" class="btn btn-default">Add to Watchlist</button>
+
 </form>
 <br />
