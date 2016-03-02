@@ -1,96 +1,49 @@
-<!DOCTYPE html>
-<meta charset="utf-8">
-<title>Graph Widget</title>
-<style>
-body {
-  font: 10px sans-serif;
-  margin: 50px;
-}
-
-rect {
-  fill: #ffffff;
-}
-
-.axis path {
-  fill: none;
-  stroke: #222222;
-  shape-rendering: crispEdges;
-}
+<br />
+<div style="width: 100%;">
+	<div class="graph-widget" style="float: left; width: 85%">
+	</div>
  
-.axis text {
-	fill: #222222;
-}
+	<!--Legend-->
+	<div style="position: relative; top: 50px;">
+		<table id="legend" style="width: 10%"></table>
+	</div>
+</div>
  
-.axis .axis-label {
-	font-size: 14px;
-}
+<!--Buttons-->
+<div style="position: relative; clear: left; display: flex; justify-content: space-between; width: 65%; left: 8%">
+<!--TODO evenly spaced and square-->
+	<button class="button-1">1 day</button>
+	<button class="button-2">5 days</button>
+	<button class="button-3">1 month</button>
+	<button class="button-4">3 months</button>
+	<button class="button-5">6 months</button>
+	<button class="button-6">All Time</button>
+</div>
  
-.line {
-  fill: none;
-  stroke-width: 1.5px;
-}
-
-table {
-  border-collapse: collapse;
-}
-
-table, th, td, tr {
-  border: 1px solid black;
-  font-size: 18px;
-}
-
-button {
-  height: 60px;
-  width: 60px;
-}
-</style>
-<body>
-    <!--This div will contain the actual graph-->
-    <div style="width: 100%;">
-      <div class="graph-widget" style="float: left; width: 85%">
-      </div>
-
-      <!--Legend-->
-      <div style="position: relative; top: 50px;">
-        <table id="legend" style="width: 10%"></table>
-      </div>
-    </div>
-
-    <!--Buttons-->
-    <div style="position: relative; clear: left; display: flex; justify-content: space-between; width: 65%; left: 8%">
-  <!--TODO evenly spaced and square-->
-      <button class="button-1">1 day</button>
-      <button class="button-2">5 days</button>
-      <button class="button-3">1 month</button>
-      <button class="button-4">3 months</button>
-      <button class="button-5">6 months</button>
-      <button class="button-6">All Time</button>
-    </div>
-</body>
-<script src="d3.v3.min.js"></script>
+<script src="graph/d3.v3.min.js"></script>
 <script>
-
+ 
 var lineColors = [
 	'red',
 	'yellow',
 	'blue',
 	'orange'
 ]
-
+ 
 // Date format of input files
 var parseTime = d3.time.format("%Y/%m/%d").parse;
-
+ 
 // Spacing around the graph
 var margin = {top: 20, right: 20, bottom: 30, left: 40},
     width = 960 - margin.left - margin.right,
     height = 500 - margin.top - margin.bottom;
-
+ 
 // Scales for the graph
 var x = d3.time.scale()
     .range([0, width]); 
 var y = d3.scale.linear()
     .range([height, 0]);
-	
+ 
 // Graph axes
 var xAxis = d3.svg.axis()
     .scale(x)
@@ -98,19 +51,19 @@ var xAxis = d3.svg.axis()
 var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
-    
+ 
 // Necessary to draw all lines
 var line = d3.svg.line()
 	.x(function(d) { return x(d.date); })
   .y(function(d) { return y(d.close); });
-
+ 
 // Add zoom functionality
 var zoom = d3.behavior.zoom()
     .on("zoom", zoomed);
-	
+ 
 // Stores data of all lines currently plotted
 var allData = [];
-
+ 
 // Main graph component
 var svg = d3.select(".graph-widget").append("svg")
 	.call(zoom)
@@ -119,39 +72,40 @@ var svg = d3.select(".graph-widget").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
     .call(zoom);
-
+ 
 // Add x axis and axis label
 svg.append("g")
     .attr("class", "axis axis--x")
     .attr("transform", "translate(0," + height + ")")
     .call(xAxis)
 .append("text")
-    .attr("class", "axis-title")
+    .attr("class", "axis-label")
     .attr("y", -10)
     .attr("x", width)
     .attr("dy", ".71em")
     .style("text-anchor", "end")
     .text("Time");
-
+ 
 // Add y axis and axis label
 svg.append("g")
     .attr("class", "axis axis--y")
     .call(yAxis)
 .append("text")
-    .attr("class", "axis-title")
+    .attr("class", "axis-label")
     .attr("transform", "rotate(-90)")
     .attr("y", 6)
     .attr("dy", ".71em")
     .style("text-anchor", "end")
     .text("Price ($)");
-
+ 
 // Add anchor for lines
 svg.append("clipPath")
     .attr("id", "clip")
     .append("rect")
+    .attr("class", "graph-rect")
     .attr("width", width)
     .attr("height", height);
-
+ 
 var curr = new Date();
 var past = new Date();
 past.setMonth(past.getMonth()-6);
@@ -161,10 +115,10 @@ svg.call(zoom.x(x).y(y));
 svg.select(".axis--x").call(xAxis);
 svg.select(".axis--y").call(yAxis);
 svg.selectAll("path.line").attr("d", line);
-
+ 
 // Display these csvs
-display(["y_goog.csv", "y_aapl.csv", "y_msft.csv"]);
-
+display(["graph/y_goog.csv", "graph/y_aapl.csv", "graph/y_msft.csv"]);
+ 
 // Connect buttons to functions
 d3.select(".button-1").on("click", oneDay);
 d3.select(".button-2").on("click", fiveDays);
@@ -172,21 +126,21 @@ d3.select(".button-3").on("click", oneMonth);
 d3.select(".button-4").on("click", threeMonths);
 d3.select(".button-5").on("click", sixMonths);
 d3.select(".button-6").on("click", allTime);
-
+ 
 // Called when user zooms or pans
 function zoomed() {
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);
 }
-
+ 
 // Used to parse CSVs
 function type(d) {
   d.date = parseTime(d.date);
   d.close = +d.close;
   return d;
 }
-
+ 
 //TODO max y in selected period not all time
 // Set x axis domain to one day
 function oneDay() {
@@ -194,17 +148,17 @@ function oneDay() {
   var curr = new Date();
   var past = new Date();
   past.setDate(past.getDate()-1);
-  
+ 
   // Set domain
   x.domain([past, curr]);
-  
+ 
   // Update graph
 	svg.call(zoom.x(x).y(y));
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);
 }
-
+ 
 // Set x axis domain to five days
 function fiveDays() {
   var curr = new Date();
@@ -215,7 +169,7 @@ function fiveDays() {
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);}
-
+ 
 // Set x axis domain to one month
 function oneMonth() {
   var curr = new Date();
@@ -226,7 +180,7 @@ function oneMonth() {
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);}
-
+ 
 // Set x axis domain to three months
 function threeMonths() {
   var curr = new Date();
@@ -237,7 +191,7 @@ function threeMonths() {
   svg.select(".axis--x").call(xAxis);
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);}
-
+ 
 // Set x axis domain to six months
 function sixMonths() {
   var curr = new Date();
@@ -249,7 +203,7 @@ function sixMonths() {
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);
 }
-
+ 
 // Set x axis domain to all time
 function allTime() {
   if (allData.length == 0) return;
@@ -269,24 +223,24 @@ function allTime() {
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);  
 }
-
+ 
 // Display line graphs
 function display(arr) {
   allData = [];
   svg.selectAll("path.line").remove();
-  d3.selectAll("tr").remove();
-  
+  d3.selectAll(".graph-tr").remove();
+ 
   // Iterate through array of CSV names
   arr.forEach(function cb(value, index, array) {
     // Only display if filename starts with "y_"
-    if (value.startsWith("y_")) {
+    if (value.includes("y_")) {
       // Parse CSV
       d3.csv(value, type, function(error, data) {
         if (error) throw error;
-        
+ 
         // Add to our data array
         allData.push(data);
-        
+ 
         // Set domain to cover max price
         var maxPrice = d3.max(allData[0], function(d) { return d.close; });
         allData.forEach(function (value, index, array) {
@@ -298,33 +252,35 @@ function display(arr) {
         svg.select(".axis--x").call(xAxis);
         svg.select(".axis--y").call(yAxis);
         svg.selectAll("path.line").attr("d", line);
-
+ 
         // Draw line
         var newLine = svg.append("path")
           .datum(data)
           .attr("class", "line")
           .attr("clip-path", "url(#clip)")
           .attr("stroke", lineColors[(allData.length-1)%4])
-          .attr("d", line)
-          
+          .attr("d", line);
+ 
         d3.select("#legend").append("tr")
-          .text(value.substring(2, value.length-4).toUpperCase())
+          .text(value.substring(8, value.length-4).toUpperCase())
+          .attr("class", "graph-tr")
           .style("color", newLine.style("stroke"))
           .on("click", function() {
             // var newOpacity = newLine.style("opacity") != 0 ? 0 : 1;
             // newLine.style("opacity", newOpacity);
-            getDetails(value.substring(2, value.length-4));
+            getDetails(value.substring(8, value.length-4));
           });
-        
+ 
         newLine.on("click", function() {
-            getDetails(value.substring(2, value.length-4));
+            getDetails(value.substring(8, value.length-4));
         });
       });
     }
   });
 }
-
+ 
 function getDetails(ticker) {
   console.log(ticker);
 }
 </script>
+<br />
