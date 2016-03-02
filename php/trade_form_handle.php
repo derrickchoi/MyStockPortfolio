@@ -9,7 +9,7 @@ if ($_GET['confirmed'] == "buy") {
 	$email = $_GET['email'];
 	$ticker = $_GET['ticker'];
 	$amount = $_GET['amount'];
-	buy($email, $ticker, $amount, floatval(getCurrentPrice($ticker)));
+	buy($email, $ticker, $amount, floatval(($ticker)));
 	echo '<body onload="returnToDashboard()"><script type="text/javascript">
 			function returnToDashboard() {
 				window.location.href = "..";
@@ -21,7 +21,7 @@ if ($_GET['confirmed'] == "buy") {
 	$email = $_GET['email'];
 	$ticker = $_GET['ticker'];
 	$amount = $_GET['amount'];
-	sell($email, $ticker, $amount, getCurrentPrice($ticker));
+	sell($email, $ticker, $amount, floatval(getCurrentPrice($ticker)));
 	echo '<body onload="returnToDashboard()"><script type="text/javascript">
 			function returnToDashboard() {
 				window.location.href = "..";
