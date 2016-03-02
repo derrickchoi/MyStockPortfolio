@@ -26,6 +26,7 @@ $email = $_SESSION["user_email"];
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<!-- Custom styles -->
 		<link href="views/dashboard.css" rel="stylesheet">
+		<a href="views/user_manual.pdf">User Manual</a>
 	</head>
 
 	<!-- time widget needs to be initiated, see time_w.php -->
