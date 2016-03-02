@@ -1,7 +1,7 @@
 <html>
 <?php
 
-// require_once("finance0.php");
+require_once("finance.php");
 require_once("db_query.php");
 
 if ($_GET['confirmed'] == "buy") {
@@ -9,7 +9,7 @@ if ($_GET['confirmed'] == "buy") {
 	$email = $_GET['email'];
 	$ticker = $_GET['ticker'];
 	$amount = $_GET['amount'];
-	buy($email, $ticker, $amount, /*getCurrentPrice($ticker)*/50.50);
+	buy($email, $ticker, $amount, floatval(getCurrentPrice($ticker)));
 	echo '<body onload="returnToDashboard()"><script type="text/javascript">
 			function returnToDashboard() {
 				window.location.href = "..";
@@ -21,7 +21,7 @@ if ($_GET['confirmed'] == "buy") {
 	$email = $_GET['email'];
 	$ticker = $_GET['ticker'];
 	$amount = $_GET['amount'];
-	sell($email, $ticker, $amount, /*getCurrentPrice($ticker)*/50.50);
+	sell($email, $ticker, $amount, getCurrentPrice($ticker));
 	echo '<body onload="returnToDashboard()"><script type="text/javascript">
 			function returnToDashboard() {
 				window.location.href = "..";
@@ -40,7 +40,7 @@ if ($_GET['confirmed'] == "buy") {
 	}
 
 	// first verify that the buy action is valid
-	if (false/*!marketIsOpen() || !isValidTicker($ticker) || $amount * getCurrentPrice($ticker) > getBalance($email)*/) {
+	if (!marketIsOpen() || !isValidTicker($ticker) || $amount * floatval(getCurrentPrice($ticker)) > floatval(getBalance($email))) {
 		echo '<body>Invalid trade';
 	} else {
 		// the buy action is valid
@@ -73,7 +73,7 @@ if ($_GET['confirmed'] == "buy") {
 	$amountUserOwns = intval($portfolio[strtoupper($ticker)]);
 
 	// first verify that the buy action is valid
-	if ($amount > $amountUserOwns/* || !marketIsOpen() || !isValidTicker($ticker)*/) {
+	if ($amount > $amountUserOwns || !marketIsOpen() || !isValidTicker($ticker)) {
 		echo '<body>Invalid trade';
 	} else {
 		// the buy action is valid
