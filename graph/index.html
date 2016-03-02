@@ -27,24 +27,45 @@ rect {
  
 .line {
   fill: none;
-  stroke-width: 1px;
+  stroke-width: 1.5px;
 }
 
+table {
+  border-collapse: collapse;
+}
+
+table, th, td, tr {
+  border: 1px solid black;
+  font-size: 18px;
+}
+
+button {
+  height: 60px;
+  width: 60px;
+}
 </style>
 <body>
-  <!--This div will contain the actual graph-->
-  <div class="graph-widget"></div>
-  
-  <!--Buttons-->
-  <div>
-<!--TODO evenly spaced and square-->
-    <button class="button-1">1 day</button>
-    <button class="button-2">5 days</button>
-    <button class="button-3">1 month</button>
-    <button class="button-4">3 months</button>
-    <button class="button-5">6 months</button>
-    <button class="button-6">All Time</button>
-  </div>
+    <!--This div will contain the actual graph-->
+    <div style="width: 100%;">
+      <div class="graph-widget" style="float: left; width: 85%">
+      </div>
+
+      <!--Legend-->
+      <div style="position: relative; top: 50px;">
+        <table id="legend" style="width: 10%"></table>
+      </div>
+    </div>
+
+    <!--Buttons-->
+    <div style="position: relative; clear: left; display: flex; justify-content: space-between; width: 65%; left: 8%">
+  <!--TODO evenly spaced and square-->
+      <button class="button-1">1 day</button>
+      <button class="button-2">5 days</button>
+      <button class="button-3">1 month</button>
+      <button class="button-4">3 months</button>
+      <button class="button-5">6 months</button>
+      <button class="button-6">All Time</button>
+    </div>
 </body>
 <script src="d3.v3.min.js"></script>
 <script>
@@ -89,6 +110,9 @@ var zoom = d3.behavior.zoom()
 	
 // Stores data of all lines currently plotted
 var allData = [];
+
+// Stores all lines currently plotted
+var allLines = [];
 
 // Main graph component
 var svg = d3.select(".graph-widget").append("svg")
@@ -274,14 +298,33 @@ function display(arr) {
         svg.selectAll("path.line").attr("d", line);
 
         // Draw line
-        svg.append("path")
-            .datum(data)
-            .attr("class", "line")
-            .attr("clip-path", "url(#clip)")
-            .attr("stroke", lineColors[(allData.length-1)%4])
-            .attr("d", line);
+        var newLine = svg.append("path")
+          .datum(data)
+          .attr("class", "line")
+          .attr("clip-path", "url(#clip)")
+          .attr("stroke", lineColors[(allData.length-1)%4])
+          .attr("d", line)
+          
+        allLines.push(newLine);
+        
+        d3.select("#legend").append("tr")
+          .text(value.substring(2, value.length-4).toUpperCase())
+          .style("color", newLine.style("stroke"))
+          .on("click", function() {
+            // var newOpacity = newLine.style("opacity") != 0 ? 0 : 1;
+            // newLine.style("opacity", newOpacity);
+            getDetails(value.substring(2, value.length-4));
+          });
+        
+        newLine.on("click", function() {
+            getDetails(value.substring(2, value.length-4));
+        });
       });
     }
   });
+}
+
+function getDetails(ticker) {
+  console.log(ticker);
 }
 </script>

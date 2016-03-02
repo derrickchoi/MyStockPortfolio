@@ -1,5 +1,10 @@
 <?php
 
+	$ticker = array(
+		"appl" => "apple",
+		"fb" => "facebook",
+		"goog" => "google",
+	);
 
 ?>
 <br />
