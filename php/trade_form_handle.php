@@ -40,7 +40,7 @@ if ($_GET['confirmed'] == "buy") {
 	}
 
 	// first verify that the buy action is valid
-	if (!marketIsOpen() || !isValidTicker($ticker) || $amount * floatval(getCurrentPrice($ticker)) > floatval(getBalance($email))) {
+	if (/*!marketIsOpen() || !isValidTicker($ticker) ||*/ $amount * floatval(getCurrentPrice($ticker)) > floatval(getBalance($email))) {
 		echo '<body>Invalid trade';
 	} else {
 		// the buy action is valid
@@ -73,7 +73,7 @@ if ($_GET['confirmed'] == "buy") {
 	$amountUserOwns = intval($portfolio[strtoupper($ticker)]);
 
 	// first verify that the buy action is valid
-	if ($amount > $amountUserOwns || !marketIsOpen() || !isValidTicker($ticker)) {
+	if ($amount > $amountUserOwns /*|| !marketIsOpen() || !isValidTicker($ticker)*/) {
 		echo '<body>Invalid trade';
 	} else {
 		// the buy action is valid
