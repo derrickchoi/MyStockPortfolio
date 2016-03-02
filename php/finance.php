@@ -127,6 +127,18 @@ function marketIsOpen(){
 
 }
 
+
+// returns true if percent change is positive
+// example: isPositive("goog");
+function isPositive($ticker){
+    $percent = getPercentChanged($ticker);
+    echo $percent;
+    if (strcmp($percent[0], "+")==0){
+        return true;
+    }
+    return false;
+}
+
     //echo getCurrentPrice("goog");
     //echo getClosingPrice("goog");
     //echo getPercentChanged("goog");
@@ -138,7 +150,7 @@ function marketIsOpen(){
 
     //echo isValidTicker("goog");
     //echo marketIsOpen();
-    
+    //echo isPositive("lnkd");
 
 ?>
 
