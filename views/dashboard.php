@@ -5,6 +5,7 @@ if ($_SESSION["user_email"] == "") {
 	header("Location: ..");
 }
 
+
 require_once("php/finance.php");
 $email = $_SESSION["user_email"];
 
@@ -33,6 +34,7 @@ $email = $_SESSION["user_email"];
 
 		<div class="container-fluid">
 			<?php
+				echo '<br />';
 				// TODO format the widgets on the page 
 				require_once("widgets/time_w.php");
 				// require_once("widgets/search_w.php");
@@ -40,6 +42,8 @@ $email = $_SESSION["user_email"];
 				require_once("widgets/watchlist_w.php");
 				require_once("widgets/search_w.php");
 				require_once("widgets/trade_w.php");
+				require_once("graph/graph_w.php");
+				displayTicker("AAPL");
 				//require_once("widgets/news_w.php");
 			?>
 

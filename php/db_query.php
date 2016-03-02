@@ -1,11 +1,11 @@
 <?php
 
-$db_hostname = "mysql14.000webhost.com";
-$db_database = "a5059233_msp";
-$db_username = "a5059233_msp";
+$db_hostname = "localhost";
+$db_database = "msp";
+$db_username = "root";
 $db_password = "mystockportfolio123";
 
-$db_server = mysql_connect($db_hostname, $db_username, $db_password);
+$db_server = mysql_connect($db_hostname, $db_username, $db_password) or die('bleh');
 mysql_select_db($db_database, $db_server);
 
 function getQueryResult($query) {

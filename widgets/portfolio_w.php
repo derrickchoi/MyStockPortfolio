@@ -15,9 +15,9 @@ echo "<div class=\"panel panel-primary\" style=\"border-color:black\">";
 			foreach($portfolio as $ticker => $amount) {
 				echo "<tr>";
 					echo "<td>" . $ticker . "</td>";
-					echo "<td>" . "companyName" . "</td>";
+					echo "<td>" . getCompanyName($ticker) . "</td>";
 					echo "<td>" . $amount . "</td>";
-					echo "<td>" . "currentPrice" . "</td>";
+					echo "<td>" . getCurrentPrice($ticker) . "</td>";
 					echo "<td>" . "<input type=\"checkbox\" value=\"check" . $ticker . "\">" . "</td>";
 				echo "<tr>";
 			}

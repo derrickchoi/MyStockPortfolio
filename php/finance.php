@@ -29,7 +29,7 @@ function getCompanyName($ticker){
     $name = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=$ticker&f=n&e=.csv");
     
     // removing the quotation marks
-    $name = str_replace('"', "", $name);
+    $name = str_replace('"', '', $name);
     return $name;
 }
 

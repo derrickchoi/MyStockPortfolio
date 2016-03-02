@@ -16,7 +16,7 @@ echo "<div class=\"panel panel-primary\" style=\"border-color:black\">";
 					echo "<td>" . "<form enctype=\"multipart/form-data\" method=\"POST\" action=\"php/watchlist_delete_handle.php\">
 								   <button style=\"background:none; border:none; margin:0; padding:0\">&#10006</button></form>" . "</td>";
 					echo "<td>" . $ticker . "</td>";
-					echo "<td>" . "companyName" . "</td>";
+					echo "<td>" . getCompanyName($ticker) . "</td>";
 					echo "<td>" . "<input type=\"checkbox\" value=\"wcheck" . $ticker . "\">" . "</td>";
 				echo "<tr>";
 			}
