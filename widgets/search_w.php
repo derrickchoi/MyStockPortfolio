@@ -10,15 +10,14 @@
 	   	    <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 		    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 		    <link rel="stylesheet" href="/resources/demos/style.css">
-			<script src="search_auto.js"></script>
 
-			<label for="stock">Stock Search: </label>
-			<input type="text" class="form-control" id="searchStock" placeholder="Search for a stock">
+			<label for="stock">Ticker Search: </label>
+			<input type="text" class="form-control" id="searchStock" placeholder="Search for a ticker">
 			<script>
 			  jQuery(document).ready(function($){
 			    var availableStock = [
 			      "Apple",
-			      "APPL",
+			      "AAPL",
 			      "Facebook",
 			      "FB",
 			      "Google",
@@ -73,10 +72,21 @@
 
 					var watchlistRow = row.appendChild(document.createElement("td"));
 
-					var watchlistButton = watchlistRow.appendChild(document.createElement("button"));
-					watchlistButton.classList.add("btn", "btn-default");
-					watchlistButton.setAttribute("id", "watchlistButton");
-					watchlistButton.textContent = "Add to Watchlist";
+					window.watchlistfx = function goToWatchlist() {
+						window.location.href = "./php/watchlist_add.php?ticker=" + name.textContent + "&email=" + "<%=Session['user_email']%>";
+					}
+
+					var watchlistLink = watchlistRow.appendChild(document.createElement("a"));
+					watchlistLink.textContent = "Add to Watchlist";
+					watchlistLink.setAttribute("href", "./php/watchlist_add.php?ticker=" + name.textContent + "&email=" + "<%=Session['user_email']%>");
+					// <a href="./php/watchlist_add.php?ticker=" + name.textContent + "&email=" + "<%=Session['user_email']%>">Add to Watchlist</a>
+					
+					// watchlistLink.classList.add("btn", "btn-default");
+					// watchlistLink.setAttribute("id", "watchlistLink");
+					// watchlistLink.textContent = "Add to Watchlist";
+					// watchlistLink.setAttribute("onclick", "return window.watchlistfx");
+
+					
 				}
 			});
 			</script>
