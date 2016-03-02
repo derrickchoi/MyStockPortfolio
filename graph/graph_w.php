@@ -64,6 +64,9 @@ var zoom = d3.behavior.zoom()
 // Stores data of all lines currently plotted
 var allData = [];
  
+var allTickers = [];
+var allLines = [];
+
 // Main graph component
 var svg = d3.select(".graph-widget").append("svg")
 	.call(zoom)
@@ -117,7 +120,7 @@ svg.select(".axis--y").call(yAxis);
 svg.selectAll("path.line").attr("d", line);
  
 // Display these csvs
-display(["graph/y_goog.csv", "graph/y_aapl.csv", "graph/y_msft.csv"]);
+// display(["graph/goog.csv", "graph/aapl.csv", "graph/msft.csv"]);
  
 // Connect buttons to functions
 d3.select(".button-1").on("click", oneDay);
@@ -223,6 +226,67 @@ function allTime() {
   svg.select(".axis--y").call(yAxis);
 	svg.selectAll("path.line").attr("d", line);  
 }
+
+function displayTicker(tickerName) {
+  if (allTickers.findIndex(function(element, index, array) { element === tickerName; }) !== -1) {
+    return;
+  } else {
+    d3.csv("graph/" + tickerName.toLowerCase() + ".csv", type, function(error, data) {
+      if (error) throw error;
+
+      // Add to our data array
+      allData.push(data);
+      allTickers.push(tickerName.toLowerCase());
+
+      // Set domain to cover max price
+      var maxPrice = d3.max(allData[0], function(d) { return d.close; });
+      allData.forEach(function (value, index, array) {
+        var max = d3.max(allData[index], function(d) { return d.close; });
+        if (max > maxPrice) maxPrice = max;
+      });
+      y.domain([0, maxPrice]);
+      svg.call(zoom.x(x).y(y));
+      svg.select(".axis--x").call(xAxis);
+      svg.select(".axis--y").call(yAxis);
+      svg.selectAll("path.line").attr("d", line);
+
+      // Draw line
+      var newLine = svg.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("clip-path", "url(#clip)")
+        .attr("stroke", lineColors[(allData.length-1)%4])
+        .attr("d", line);
+        
+      allLines.push(newLine);
+      
+      d3.select("#legend").append("tr")
+        .text(tickerName.toUpperCase())
+        .attr("class", "graph-tr")
+        .style("color", newLine.style("stroke"))
+        .on("click", function() {
+          getDetails(tickerName);
+        });
+        
+      newLine.on("click", function() {
+          getDetails(tickerName);
+      });
+    });
+  }
+}
+
+function removeTicker(tickerName) {
+  var index = allTickers.findIndex(function(element, index, array) { return element === tickerName.toLowerCase(); });
+  if (index === -1) return;
+  else {
+    var line = allLines[index];
+    line.style("opacity", 0);
+    allLines.splice(index, 1);
+    allTickers.splice(index, 1);
+    allData.splice(index, 1);
+    document.getElementById("legend").deleteRow(index);
+  }
+}
  
 // Display line graphs
 function display(arr) {
@@ -232,50 +296,47 @@ function display(arr) {
  
   // Iterate through array of CSV names
   arr.forEach(function cb(value, index, array) {
-    // Only display if filename starts with "y_"
-    if (value.includes("y_")) {
-      // Parse CSV
-      d3.csv(value, type, function(error, data) {
-        if (error) throw error;
- 
-        // Add to our data array
-        allData.push(data);
- 
-        // Set domain to cover max price
-        var maxPrice = d3.max(allData[0], function(d) { return d.close; });
-        allData.forEach(function (value, index, array) {
-          var max = d3.max(allData[index], function(d) { return d.close; });
-          if (max > maxPrice) maxPrice = max;
-        });
-        y.domain([0, maxPrice]);
-        svg.call(zoom.x(x).y(y));
-        svg.select(".axis--x").call(xAxis);
-        svg.select(".axis--y").call(yAxis);
-        svg.selectAll("path.line").attr("d", line);
- 
-        // Draw line
-        var newLine = svg.append("path")
-          .datum(data)
-          .attr("class", "line")
-          .attr("clip-path", "url(#clip)")
-          .attr("stroke", lineColors[(allData.length-1)%4])
-          .attr("d", line);
- 
-        d3.select("#legend").append("tr")
-          .text(value.substring(8, value.length-4).toUpperCase())
-          .attr("class", "graph-tr")
-          .style("color", newLine.style("stroke"))
-          .on("click", function() {
-            // var newOpacity = newLine.style("opacity") != 0 ? 0 : 1;
-            // newLine.style("opacity", newOpacity);
-            getDetails(value.substring(8, value.length-4));
-          });
- 
-        newLine.on("click", function() {
-            getDetails(value.substring(8, value.length-4));
-        });
+    // Parse CSV
+    d3.csv(value, type, function(error, data) {
+      if (error) throw error;
+
+      // Add to our data array
+      allData.push(data);
+
+      // Set domain to cover max price
+      var maxPrice = d3.max(allData[0], function(d) { return d.close; });
+      allData.forEach(function (value, index, array) {
+        var max = d3.max(allData[index], function(d) { return d.close; });
+        if (max > maxPrice) maxPrice = max;
       });
-    }
+      y.domain([0, maxPrice]);
+      svg.call(zoom.x(x).y(y));
+      svg.select(".axis--x").call(xAxis);
+      svg.select(".axis--y").call(yAxis);
+      svg.selectAll("path.line").attr("d", line);
+
+      // Draw line
+      var newLine = svg.append("path")
+        .datum(data)
+        .attr("class", "line")
+        .attr("clip-path", "url(#clip)")
+        .attr("stroke", lineColors[(allData.length-1)%4])
+        .attr("d", line);
+
+      d3.select("#legend").append("tr")
+        .text(value.substring(8, value.length-4).toUpperCase())
+        .attr("class", "graph-tr")
+        .style("color", newLine.style("stroke"))
+        .on("click", function() {
+          // var newOpacity = newLine.style("opacity") != 0 ? 0 : 1;
+          // newLine.style("opacity", newOpacity);
+          getDetails(value.substring(8, value.length-4));
+        });
+
+      newLine.on("click", function() {
+          getDetails(value.substring(8, value.length-4));
+      });
+    });
   });
 }
  
