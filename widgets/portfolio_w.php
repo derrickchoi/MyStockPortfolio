@@ -1,10 +1,9 @@
 <?php
 
 $portfolio = getPortfolio($email); // gets the user's portfolio stocks
-$fapi = new financeAPI();
 echo "<div class=\"panel panel-primary\" style=\"border-color:black\">";
 	echo "<div class=\"panel-heading\" style=\"color:black; background-color:white; border-color:black;\">Your Portfolio</div>";
-	echo "<div class=\"panel-body\" style=\"height:500px; overflow-y:scroll;\">";
+	echo "<div class=\"panel-body\" style=\"height:250px; overflow-y:scroll;\">";
 		echo "<table class=\"table table-bordered\">";
 			echo "<tr>";
 				echo "<td>" . "Ticker Name" . "</td>";
