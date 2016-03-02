@@ -36,5 +36,6 @@
 <a href="php/logout.php">Logout</a>
 <br />
 <?php 
-	// echo getBalance($email);
+	echo 'Account balance: $' . getBalance($email) . ' (USD)';
 ?>
+<br />

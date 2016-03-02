@@ -12,19 +12,90 @@ function getQueryResult($query) {
 	return mysql_query($query);
 }
 
+function getBalance($email) {
+	// return the account balance of a user as a float, since balances will likely not be whole dollars
+	$query = "SELECT balance FROM users WHERE email = '" . $email . "'";
+	$result = getQueryResult($query);
+	$balanceString = mysql_result($result, 0, 'balance');
+	$balance = floatval($balanceString);
+	return $balance;
+}
+
+function getTicker($companyName) {
+	
+}
+
+function setBalance($email, $newBalance) { // New Balance is not a sponsor of this project
+	$updateBalanceQuery = "UPDATE users SET balance = " . $newBalance . " WHERE email = '" . $email . "'";
+	getQueryResult($updateBalanceQuery);
+}
+
+function getUserAmount($email, $ticker) {
+
+}
+
+function buy($email, $tickerToPurchase, $amountToPurchase, $pricePerShare) {
+
+	// any logic for buying shares re:the user is preferably here, e.g. does
+	// 		the user have the funds to make the purchase
+	// any logic re:the market, e.g. logic for whether the market is
+	// 		oepn, should be done in php/trade_form_handle.php (when possible)
+
+	// we need to ensure that $priceForShares can be a double, e.g. $5.17, so we add 0.0
+	$priceForShares = ($amountToPurchase + 0.0) * $pricePerShare;
+	$balance = getBalance($email);
+
+	$potentialBalance = $balance - $priceForShares;
+
+	if ($potentialBalance < 0) {
+		// reject the purchase, since the account doesn't have the funds to pay for the shares
+	} else {
+		// the new balance for the user, after the transaction, is $potentialBalance (>= 0)
+		setBalance($email, $potentialBalance);
+
+		$query = "SELECT id, amount FROM portfolios WHERE email ='" . $email . "' AND ticker = '" . $tickerToPurchase . "'";
+		$result = getQueryResult($query);
+
+		if (mysql_num_rows($result) == 0) { // the user has this ticker in neither their portfolio or watchlist
+			
+			$updatePortfolioQuery = "INSERT INTO portfolios (email, ticker, amount) VALUES ('" . $email . "', '" . $tickerToPurchase . "', '" . $amountToPurchase . "')";
+			getQueryResult($updatePortfolioQuery);
+
+		} else if (mysql_num_rows($result) > 1) { // the user has this ticker in both their portfolio and watchlist
+			// we only want to update the portfolio item in the database, i.e. where amount != 0
+			
+			$id = mysql_result($result, 0, 'id');
+			$amount = mysql_result($result, 0, 'amount');
+
+			if (intval($amount) == 0) {
+				$id = mysql_result($result, 1, 'amount');
+			}
+
+			$updatePortfolioQuery = "UPDATE portfolios SET amount = " . ($amountToPurchase + $amount) . " WHERE id = " . $id . "AND  email = '" . $email . "' AND amount > 0";
+			getQueryResult($updatePortfolioQuery);
+
+		} else { // the user has this ticker in either their portfolio or their watchlist (only one)
+			// we will update the amount to $amountToPurchase + $amount
+
+			$amount = mysql_result($result, 0, 'amount');
+
+			$updatePortfolioQuery = "UPDATE portfolios SET amount = " . ($amountToPurchase + $amount) . " WHERE email = '" . $email . "' AND ticker = '" . $tickerToPurchase . "'";
+			getQueryResult($updatePortfolioQuery);
+
+		}
+	}
+}
+
 function credentialsValid($email, $encryptedPassword) {
 	// return true if the supplied credentials match credentials from the database, false otherwise
 
-	$query = "SELECT * FROM users WHERE email = '" . $email . "'";
+	$query = "SELECT * FROM users WHERE email = '" . $email . "' AND encryptedPassword = '" . $encryptedPassword . "'";
 	$result = getQueryResult($query);
 
-	// if there is no user with the given email address, the credentials are invalid
-	// else if the given encrypted password doesn't match the encrypted password in the DB, the credentials are invalid
+	// if there is no user with the given email address and encryptedPassword, the credentials are invalid
 	// else the credentials are valid
 
 	if (mysql_num_rows($result) == 0) {
-		return false;
-	} else if (strcmp(mysql_result($result, 0, 'encryptedPassword'), $encryptedPassword) != 0) {
 		return false;
 	} else {
 		return true;
