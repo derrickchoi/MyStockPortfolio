@@ -73,13 +73,9 @@
 
 					var watchlistRow = row.appendChild(document.createElement("td"));
 
-					window.watchlistfx = function goToWatchlist() {
-						window.location.href = "./php/watchlist_add.php?ticker=" + name.textContent + "&email=" + "<%=Session['user_email']%>";
-					}
-
 					var watchlistLink = watchlistRow.appendChild(document.createElement("a"));
 					watchlistLink.textContent = "Add to Watchlist";
-					watchlistLink.setAttribute("href", "./php/watchlist_add.php?ticker=" + name.textContent + "&email=" + "<%=Session['user_email']%>");
+					watchlistLink.setAttribute("href", "./php/watchlist_add.php?ticker=" + name.textContent);
 					// <a href="./php/watchlist_add.php?ticker=" + name.textContent + "&email=" + "<%=Session['user_email']%>">Add to Watchlist</a>
 					
 					// watchlistLink.classList.add("btn", "btn-default");

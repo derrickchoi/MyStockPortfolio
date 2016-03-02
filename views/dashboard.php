@@ -27,7 +27,40 @@ $email = $_SESSION["user_email"];
 		<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 		<!-- Custom styles -->
 		<link href="views/dashboard.css" rel="stylesheet">
-		<a href="views/user_manual.pdf">User Manual</a>
+
+		<style>
+			#header {
+			    text-align:center;
+			    padding:5px;
+			}
+			#nav {
+			    line-height:30px;
+			    height:300px;
+			    width:300px;
+			    float:left;
+			    padding:5px; 
+			}
+			#section {
+			    width:350px;
+			    float:left;
+			    padding:10px; 
+			}
+			#footer {
+			    background-color:black;
+			    color:white;
+			    clear:both;
+			    text-align:center;
+			    padding:5px; 
+			}
+			#aside {
+				line-height:30px;
+				height:300px;
+				width:260px;
+				float:right;
+				padding:5px;
+			}
+		</style>
+
 	</head>
 
 	<!-- time widget needs to be initiated, see time_w.php -->
@@ -35,17 +68,33 @@ $email = $_SESSION["user_email"];
 
 		<div class="container-fluid">
 			<?php
+
 				echo '<br />';
-				// TODO format the widgets on the page 
-				require_once("widgets/time_w.php");
-				// require_once("widgets/search_w.php");
-				require_once("widgets/portfolio_w.php");
-				require_once("widgets/watchlist_w.php");
-				require_once("widgets/search_w.php");
-				require_once("widgets/trade_w.php");
+				print '<div id="header">';
+					require_once("widgets/search_w.php");
+				print '</div>';
+
+				print '<div id="aside">';
+					require_once("widgets/time_w.php");
+					print '<a href="views/user_manual.pdf">User Manual</a>';
+					print '<br />';
+					require_once("widgets/watchlist_w.php");
+				print '</div>';
+
+				print '<div id="nav">';
+					require_once("widgets/csv_w.php");
+					print '<br />';
+					require_once("widgets/portfolio_w.php");
+					print '<br />';
+					require_once("widgets/trade_w.php");
+				print '</div>';
+
+				print '<div id="section">';
 				require_once("graph/graph_w.php");
-				displayTicker("AAPL");
-				//require_once("widgets/news_w.php");
+				print '<br />';
+				// require_one("widgets/detailed_info_w.php");
+				require_once("widgets/news_w.php");
+				print '</div>';
 			?>
 
 		</div>
