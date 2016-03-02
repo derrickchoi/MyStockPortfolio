@@ -1,3 +1,4 @@
+
 <?php
 
 /*
@@ -60,13 +61,66 @@ function getPercentChanged($ticker){
 
 }
 
+function getHistoricalData($ticker, $startDate, $endDate){
+    // pasing date
+    $startMonth = substr($startDate, 0 , 2);
+    $startDay = substr($startDate, 2, 2);
+    $startYear = substr($startDate, 4, 4);
+
+    $endMonth = substr($endDate, 0, 2);
+    $endDay = substr($endDate, 2, 2);
+    $endYear = substr($endDate, 4, 4);
+
+    $url = "http://ichart.finance.yahoo.com/table.csv?s=$ticker&a=$startMonth&b=$startDay&c=$startYear&d=$endMonth&e=$endDay&f=$endYear&g=d&ignore=.csv";
+
+    echo file_get_contents($url);
+
+    return $url;
+
+}
+
+function getIntradayData($ticker, $days){
+    $url = "http://chartapi.finance.yahoo.com/instrument/1.0/.$ticker./chartdata;type=quote;range=.$days.d/csv";
+
+
+}
+
+function isValidTicker($ticker){
+    //$url = "http://d.yimg.com/autoc.finance.yahoo.com/autoc?query=$ticker&region=1&lang=en&callback=YAHOO.Finance.SymbolSuggest.ssCallback";
+    $name = file_get_contents("http://finance.yahoo.com/d/quotes/csv?s=$ticker&f=n&e=.csv");
+    
+    if ( strcmp('"', $name[0]) ==0){
+        return true;
+    }
+    return false;
+
+}
+
+function marketIsOpen(){
+
+
+   date_default_timezone_set('US/Eastern');
+   $currenttime = date('h:i:s:u');
+   list($hrs,$mins,$secs,$msecs) = split(':',$currenttime);
+   //echo " => $hrs:$mins:$secs\n";
+
+   if ($hrs>=9 && $hrs<16){
+     return true;
+   }
+   return false;
+
+}
+
     echo getCurrentPrice("goog");
     echo getClosingPrice("goog");
     echo getPercentChanged("goog");
 
+    //getHistoricalData('GOOG', "010102015", "01012016");
+    //var_dump($a);
 
-
-
+    //echo isValidTicker("goog");
+    //echo marketIsOpen();
     
 
 ?>
+
