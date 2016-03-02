@@ -103,3 +103,62 @@ body {
   display: inline-block;
   border-radius: 50%;
 }
+
+path {
+   fill: none;
+}
+
+.axis path {
+  fill: none;
+  stroke: #222222;
+  shape-rendering: crispEdges;
+}
+ 
+.axis text {
+	fill: #222222;
+}
+ 
+.axis .axis-label {
+	font-size: 14px;
+}
+
+#legend {
+  border-collapse: collapse;
+  border: 1px solid black;
+  font-size: 18px;
+}
+
+.graph-tr {
+  border: 1px solid black;
+  font-size: 18px;
+}
+
+.button-1 {
+  height: 60px;
+  width: 60px;
+}
+
+.button-2 {
+  height: 60px;
+  width: 60px;
+}
+
+.button-3 {
+  height: 60px;
+  width: 60px;
+}
+
+.button-4 {
+  height: 60px;
+  width: 60px;
+}
+
+.button-5 {
+  height: 60px;
+  width: 60px;
+}
+
+.button-6 {
+  height: 60px;
+  width: 60px;
+}
