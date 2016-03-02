@@ -21,7 +21,7 @@
 			      "Facebook",
 			      "FB",
 			      "Google",
-			      "GOOGL",
+			      "GOOG",
 			      "Microsoft",
 			      "MSFT",
 			      "Tesla",
@@ -69,6 +69,7 @@
 					var graphButton = graphRow.appendChild(document.createElement("button"));
 					graphButton.classList.add("btn", "btn-default");
 					graphButton.textContent = "Graph";
+					graphButton.setAttribute("onclick", "display([\"graph/y_" + name.textContent.toLowerCase() + ".csv\"])");
 
 					var watchlistRow = row.appendChild(document.createElement("td"));
 

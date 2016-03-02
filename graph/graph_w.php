@@ -117,7 +117,7 @@ svg.select(".axis--y").call(yAxis);
 svg.selectAll("path.line").attr("d", line);
  
 // Display these csvs
-//display(["graph/y_goog.csv", "graph/y_aapl.csv", "graph/y_msft.csv"]);
+display(["graph/y_goog.csv", "graph/y_aapl.csv", "graph/y_msft.csv"]);
  
 // Connect buttons to functions
 d3.select(".button-1").on("click", oneDay);
