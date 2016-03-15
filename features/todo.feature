@@ -4,7 +4,7 @@ Feature: Todo
     I want to be able to submit, view and delete to-do list items
     Scenario: New item
         Given I am on the home page
-        When I click on New Item
+        When I click on Login
         And I fill in the item
         And I click the button Submit
         Then I should see the new item added to the list
