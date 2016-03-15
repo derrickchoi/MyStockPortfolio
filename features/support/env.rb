@@ -7,6 +7,6 @@ require 'test/unit/assertions'
 
 World(Test::Unit::Assertions)
 
-#Capybara.default_driver = :mechanize
+Capybara.default_driver = :selenium
 Capybara.app_host = "http://localhost/mystockportfolio"
 World(Capybara)
