@@ -3,8 +3,8 @@ Feature: Todo
     As a user
     I want to be able to submit, view and delete to-do list items
     Scenario: New item
-        Given I am on the home page
-        When I click on Login
-        And I fill in the item
-        And I click the button Submit
-        Then I should see the new item added to the list
+        Given I am on the login page
+        When I enter the email udubey@usc.edu
+        And I enter the password temporary
+        And I click on the button Login
+        Then I should be forwarded to the Dashboard View
