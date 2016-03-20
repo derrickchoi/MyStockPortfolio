@@ -13,3 +13,9 @@ end
 Then /^I should be forwarded to the Dashboard View$/ do
 	pending # express the regexp above with the code you wish you had
 end
+Then /^I should have a (.*) button$/ do |butt|
+	expect(page).to have_selector :button, butt
+end
+Then /^I should have (\d+) (.*) css$/ do |num, type|
+	expect(page).to have_css type, count: num
+end
