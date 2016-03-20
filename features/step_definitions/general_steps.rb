@@ -22,3 +22,22 @@ end
 Then /^I should see the button (.*)$/ do |butt|
 	expect(page).to have_button(butt)
 end
+Then /^I should have (\d+) of (.*) selector$/ do |num, selector|
+	expect(page).to have_css selector, count: num
+end
+Then /^I should see a (.*) value for css (.*) of selector (.*)$/ do |value, css, selector|
+	expect((page.find selector).native.css_value(css)).to eq(value)
+end
+Then /^I should see a (.*) value for css (.*) of all selector (.*)$/ do |value, css, selector|
+	(page.all selector).each do |select|
+		expect(select.native.css_value(css)).to eq(value)
+	end
+end
+Then /^I should see one of (.*) values for css (.*) of all selector (.*)$/ do |values, css, selector|
+	(page.all selector).each do |select|
+		expect(values).to include(select.native.css_value(css))
+	end
+end
+Then /^I should see the text (.*) for selector (.*)$/ do |value, selector|
+	expect(page.find selector).to have_text(value)
+end

@@ -59,7 +59,7 @@ function Graph() {
       .attr("transform", "translate(0," + this.height + ")")
       .call(this.xAxis)
   .append("text")
-      .attr("class", "axis-label")
+      .attr("class", "axis-label axis-label--x")
       .attr("y", -10)
       .attr("x", this.width)
       .attr("dy", ".71em")
@@ -71,7 +71,7 @@ function Graph() {
       .attr("class", "axis axis--y")
       .call(this.yAxis)
   .append("text")
-      .attr("class", "axis-label")
+      .attr("class", "axis-label axis-label--y")
       .attr("transform", "rotate(-90)")
       .attr("y", 6)
       .attr("dy", ".71em")
@@ -85,6 +85,9 @@ function Graph() {
       .attr("class", "graph-rect")
       .attr("width", this.width)
       .attr("height", this.height);
+
+  this.svg.selectAll(".domain").style("stroke", "#222");
+  this.svg.selectAll(".axis").style("stroke", "#222");
 
   var curr = new Date();
   var past = new Date();
