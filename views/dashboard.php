@@ -99,12 +99,12 @@ $email = $_SESSION["user_email"];
 
 		</div>
 
-		<script type="text/javascript">
+<!-- 		<script type="text/javascript">
 			displayTicker('AAPL');
 			displayTicker('GOOG');
 			displayTicker('MSFT');
 			displayTicker('FB');
-		</script>
+		</script>-->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 		<script>window.jQuery || document.write('<script src="../jquery.min.js"><\/script>')</script>
 		<!-- Latest compiled and minified JavaScript -->
