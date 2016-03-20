@@ -9,6 +9,6 @@ Feature: Account Management
         And I click on the button Login
         Then I should be forwarded to the Dashboard View
     Scenario: Logging out
-    	Given I am on the dashboard
-    	When I click on the button Logout
+    	Given I am on the dashboard page
+    	When I click on the link Logout
     	Then I should be forwarded to the Login View
