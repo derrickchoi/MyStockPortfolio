@@ -42,3 +42,9 @@ end
 When /^I visit the site$/ do
 	visit 'http://localhost/mystockportfolio/index.php'
 end
+Then /^I should see the textfield (.*)$/ do |field|
+	expect(page).to have_field(field)
+end
+Then /^I should see the button (.*)$/ do |butt|
+	expect(page).to have_button(butt)
+end
