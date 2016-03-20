@@ -15,9 +15,7 @@ Then /^I should be forwarded to the Dashboard View$/ do
 end
 
 Given /^I am on the dashboard page$/ do
-	if page.has_link?('Logout') do 
-		# do nothing, we're already on the dashboard
-	else
+	if !page.has_link?('Logout')
 		visit "http://localhost/mystockportfolio/index.php"
 		fill_in('Email address', with: 'udubey@usc.edu')
 		fill_in('Password', with: 'temporary')
