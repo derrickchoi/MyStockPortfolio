@@ -48,6 +48,7 @@ function Graph() {
     .call(this.zoom)
       .attr("width", this.width + this.margin.left + this.margin.right)
       .attr("height", this.height + this.margin.top + this.margin.bottom)
+      .style("background-color", "white")
     .append("g")
       .attr("transform", "translate(" + this.margin.left + "," + this.margin.top + ")")
       .call(this.zoom);
@@ -236,7 +237,7 @@ Graph.prototype.displayTicker = function(tickerName) {
         .datum(data)
         .attr("class", "line")
         .attr("clip-path", "url(#clip)")
-        .attr("stroke", lineColors[(this.allData.length-1)%4])
+        .style("stroke", lineColors[(this.allData.length-1)%4])
         .attr("d", this.line);
         
       this.allLines.push(newLine);
@@ -302,7 +303,7 @@ Graph.prototype.display = function(arr) {
         .datum(data)
         .attr("class", "line")
         .attr("clip-path", "url(#clip)")
-        .attr("stroke", graph.lineColors[index%4])
+        .style("stroke", graph.lineColors[index%4])
         .attr("d", graph.line);
 
       d3.select("#legend").append("tr")

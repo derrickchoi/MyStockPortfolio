@@ -24,3 +24,4 @@ Feature: Todo
         Then I should have 2 .axis css
         Then I should have 1 .axis--x css
         Then I should have 1 .axis--y css
+        Then I should see a rgba(255, 255, 255, 1) value for css background-color of type svg
