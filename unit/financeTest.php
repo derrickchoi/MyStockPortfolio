@@ -122,9 +122,21 @@ class FinanceTest extends PHPUnit_Framework_Testcase{
 
 	// testing getHistoricalData($ticker, $startDate, $endDate) function in finance.php
 	function testGetHistoricalDataReturnValidURL(){
-		$url = getHistoricalData('GOOG', "010102015", "01012016");
+		$url = getHistoricalData('GOOG', "01012015", "01012016");
 		$headers = @get_headers($url);
 		$this->assertFalse(strpos($headers[0], '404'));
+	}
+
+	function testGetHistoricalDataNotNull(){
+		$url = getHistoricalData('aapl', "01012015", "01012016");
+		$content = file_get_contents($url);
+		$this->assertNotNull($content);
+	}
+
+	function testGetHistoricalDataNotEmpty(){
+		$url = getHistoricalData('yhoo', "01012015", "01012016");
+		$content = file_get_contents($url);
+		$this->assertNotEmpty($content);
 	}
 
 	// testing isValidTicker($ticker) function in finance.php
@@ -137,8 +149,19 @@ class FinanceTest extends PHPUnit_Framework_Testcase{
 		$this->assertFalse(isValidTicker("yhaa"));
 	}
 
+	// testing isPostive($ticker) function in finance.php
 
-
+	function testIsPositiveValid(){
+		$current = getCurrentPrice("goog");
+		$prevClose = getClosingPrice("goog");
+		$isPostiveChange = isPositive("goog");
+		if ($current>$prevClose){
+			$this->assertTrue($isPostiveChange);
+		}
+		else{
+			$this->assertFalse($isPostiveChange);
+		}
+	}
 
 }
 
