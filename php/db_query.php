@@ -155,8 +155,10 @@ function getWatchlist($email) {
 function addToWatchlist($ticker) {
 	// todo: make email a parameter
 	$email = $_SESSION['user_email'];
+	//$email = "udubey@usc.edu";
 	if (!in_array($ticker, getWatchlist($email))) {
 		$query = "INSERT INTO portfolios (email, ticker) VALUES (" . $email . ", " . $ticker . ")";
+		getQueryResult($query);
 	}
 }
 
