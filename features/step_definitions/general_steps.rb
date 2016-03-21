@@ -41,3 +41,6 @@ end
 Then /^I should see the text (.*) for selector (.*)$/ do |value, selector|
 	expect(page.find selector).to have_text(value)
 end
+Then /^I should see the table (.*)$/ do |tab|
+	expect(page).to have_table(tab)
+end
