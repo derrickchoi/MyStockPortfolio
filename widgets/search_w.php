@@ -16,7 +16,7 @@
 			<script>
 			  jQuery(document).ready(function($){
 			    var availableStock = [
-			      "Apple",
+			     "Apple",
 			      "AAPL",
 			      "Facebook",
 			      "FB",
