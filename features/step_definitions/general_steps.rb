@@ -58,3 +58,12 @@ end
 When /^I enter (.*) for (.*)$/ do |text, field|
 	fill_in(field, with: text)
 end
+When /^I check the checkbox (.*)$/ do |box|
+	check box
+end
+When /^I uncheck the checkbox (.*)$/ do |box|
+	uncheck box
+end
+And /^I have (\d+) of selector (.*)$/ do |num, selector|
+	#pending
+end

@@ -36,3 +36,6 @@ Feature: Graph
 	Scenario: Graph Legend
 		Given I am on the dashboard page
 		Then I should see the table legend
+	Scenario: Graph Six Months Range Default
+		Given I am on the dashboard page
+		Then 6 months should be the default range
