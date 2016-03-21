@@ -1,4 +1,4 @@
-Feature: Graph
+Feature: Portfolio
 	In order to view my stock information
 	As a user
 	I need to see a list of the stocks I own
