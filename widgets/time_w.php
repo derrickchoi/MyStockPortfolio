@@ -2,6 +2,8 @@
 
 	function startTime() {
 
+		document.body.style.zoom = 0.75;
+
 		// code for automatic time out after 5 minutes of inactivity:
 		var t;
 
@@ -36,6 +38,6 @@
 <a href="php/logout.php">Logout</a>
 <br />
 <?php 
-	echo 'Account balance: $' . getBalance($email) . ' (USD)';
+	echo 'Account balance: $<span id="acctBalance">' . getBalance($email) . '</span> (USD)';
 ?>
 <br />

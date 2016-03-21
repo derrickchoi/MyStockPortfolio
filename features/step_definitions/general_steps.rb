@@ -1,3 +1,5 @@
+
+
 When /^I click on the button (.*)$/ do |butt|
     click_button(butt)
 end
@@ -7,11 +9,19 @@ end
 
 Given /^I am on the dashboard page$/ do
 	visit 'http://localhost/mystockportfolio/index.php'
-	if !page.has_link?('Logout')
+	if !page.has_button?('Login') && !page.has_link?('Logout')
+		visit 'http://localhost'
+		Capybara.reset_sessions!
+		visit 'http://localhost/mystockportfolio/index.php'
+		expect(page).to have_button('Login')
+	end
+	if page.has_button?('Login')
 		fill_in('Email address', with: 'udubey@usc.edu')
 		fill_in('Password', with: 'temporary')
 		click_button('Login')
 	end
+	expect(page).to have_link('Logout')
+	page.execute_script('document.body.style.zoom = 0.75;')
 end
 When /^I click on the link (.*)$/ do |link|
 	click_link(link)
@@ -43,4 +53,8 @@ Then /^I should see the text (.*) for selector (.*)$/ do |value, selector|
 end
 Then /^I should see the table (.*)$/ do |tab|
 	expect(page).to have_table(tab)
+end
+
+When /^I enter (.*) for (.*)$/ do |text, field|
+	fill_in(field, with: text)
 end
