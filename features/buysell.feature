@@ -17,6 +17,12 @@ Feature: Buy/Sell
 		When I enter AAPL for Ticker Name
 		And I enter 2 for Quantity
 		Then when I do not confirm the buy transaction, I should see my account balance and portfolio stay the same
+	Scenario: Executing an invalid sell operation
+		Given I am on the dashboard page
+		And the market is open
+		When I enter bloimschikle for Ticker Name
+		And I enter 2 for Quantity
+		Then I should see the Invalid Trade Error and my portfolio stays the same upon selling
 	Scenario: Attempting to execute a sale with insufficient shares
 		Given I am on the dashboard page
 		And the market is open
