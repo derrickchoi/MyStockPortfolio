@@ -1,0 +1,8 @@
+<phpunit>
+<filter>
+  <whitelist processUncoveredFilesFromWhitelist="true">
+    <file>/var/www/html/mystockportfolio/php/finance.php</file>
+    <file>/var/www/html/mystockportfolio/php/db_query.php</file>
+  </whitelist>
+</filter>
+</phpunit>
