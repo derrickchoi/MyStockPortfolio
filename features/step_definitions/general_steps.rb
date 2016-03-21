@@ -9,7 +9,8 @@ end
 
 Given /^I am on the dashboard page$/ do
 	visit 'http://localhost/mystockportfolio/index.php'
-	if !page.has_button?('Login') && !page.has_link?('Logout')
+	page.evaluate_script('document.body.style.zoom = 0.75;')
+	if !page.has_button?('Login') && !page.has_content?('Search')
 		visit 'http://localhost'
 		Capybara.reset_sessions!
 		visit 'http://localhost/mystockportfolio/index.php'
@@ -20,8 +21,7 @@ Given /^I am on the dashboard page$/ do
 		fill_in('Password', with: 'temporary')
 		click_button('Login')
 	end
-	expect(page).to have_link('Logout')
-	page.execute_script('document.body.style.zoom = 0.75;')
+	expect(page).to have_content('Search')
 end
 When /^I click on the link (.*)$/ do |link|
 	click_link(link)

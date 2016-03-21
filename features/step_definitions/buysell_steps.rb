@@ -29,7 +29,7 @@ Then /^when I do not confirm the (buy|sell) transaction, I should see my account
 	sleep(1)
 	page.driver.browser.switch_to.alert.dismiss
 	sleep(4)
-	expect(page).to have_link('Logout')
+	expect(page).to have_content('Search')
 	acctBalance2 = find_by_id('acctBalance').text.to_i
 	expect(acctBalance).to eq(acctBalance2)
 end
@@ -39,7 +39,13 @@ Given /^I have (\d+) shares of (.*)$/ do |quantity, ticker|
 end
 
 Then /^I should see the Invalid Trade Error and my portfolio stays the same upon selling$/ do
+	acctBalance = find_by_id('acctBalance').text.to_i
+	click_button('Sell')
+	sleep(2)
 	expect(page).to have_content('Invalid')
+	visit 'http://localhost/mystockportfolio'
+	acctBalance2 = find_by_id('acctBalance').text.to_i
+	expect(acctBalance2).to eq(acctBalance)
 end
 
 Then /^when I confirm the (buy|sell) transaction I should see my account balance and portfolio updated for (buying|selling) (\d+) shares of (.*)$/ do |buy_or_sell, buying_or_selling, quantity, ticker|
@@ -55,8 +61,8 @@ Then /^when I confirm the (buy|sell) transaction I should see my account balance
 	expect(page).to have_link('Logout')
 	acctBalance2 = find_by_id('acctBalance').text.to_i
 	if buy_or_sell == 'buy'
-		expect(acctBalance).to be > acctBalance2
+		expect(acctBalance2).to be < acctBalance
 	elsif buy_or_sell == 'sell'
-		expect(acctBalance).to be < acctBalance2;
+		expect(acctBalance2).to be > acctBalance
 	end
 end
