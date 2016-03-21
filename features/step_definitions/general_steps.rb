@@ -67,3 +67,8 @@ end
 And /^I have (\d+) of selector (.*)$/ do |num, selector|
 	#pending
 end
+Then /^I should see (\d+) of selector (.*) inside each (.*) selector$/ do |num, selector1, selector2|
+	(page.all selector2).each do |select|
+		expect(select).to have_css selector1, count: num
+	end
+end
